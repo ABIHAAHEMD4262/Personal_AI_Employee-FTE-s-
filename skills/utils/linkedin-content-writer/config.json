@@ -1,0 +1,15 @@
+{
+  "default_style": "thought-leadership",
+  "include_emojis": true,
+  "include_hashtags": true,
+  "max_length": 1300,
+  "cta_options": [
+    "What's your take?",
+    "Thoughts?",
+    "Let me know in the comments 👇",
+    "Share if you agree",
+    "Tag someone who needs to see this",
+    "Save this for later",
+    "Follow for more"
+  ]
+}

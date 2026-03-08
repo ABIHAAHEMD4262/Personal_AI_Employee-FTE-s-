@@ -1,0 +1,6 @@
+{
+  "check_interval": 300,
+  "keywords": ["hiring", "opportunity", "project", "collaboration", "freelance", "consulting"],
+  "notification_types": ["messages", "comments", "connection_requests"],
+  "headless": true
+}

@@ -1,19 +1,31 @@
-# Personal AI Employee - Bronze Tier
+# Personal AI Employee - Silver Tier
 
 > **Tagline:** Your life and business on autopilot. Local-first, agent-driven, human-in-the-loop.
 
-This is the **Bronze Tier** implementation of the Personal AI Employee hackathon - a foundational autonomous agent that processes files dropped into your Obsidian vault.
+This is the **Silver Tier** implementation of the Personal AI Employee hackathon - a functional autonomous agent with email integration, approval workflows, and automated posting.
 
 ---
 
 ## 📦 What's Included
 
+### Bronze Tier (Foundation)
 | Component | Description | Location |
 |-----------|-------------|----------|
 | **Obsidian Vault** | Dashboard, Handbook, Goals | `AI_Employee_Vault/` |
 | **File Watcher** | Monitors /Inbox for new files | `watchers/filesystem_watcher.py` |
 | **Process Drop Skill** | Processes files in /Needs_Action | `skills/process-drop/` |
-| **Base Watcher** | Template for future watchers | `watchers/base_watcher.py` |
+
+### Silver Tier (New)
+| Component | Description | Location |
+|-----------|-------------|----------|
+| **Gmail Watcher** | Monitor Gmail for important emails | `skills/watchers/gmail-watcher/` |
+| **Create Plan Skill** | Generate Plan.md files | `skills/actions/create-plan/` |
+| **Approval Workflow** | Human-in-the-loop approvals | `skills/workflow/approval-workflow/` |
+| **Send Email** | Send emails via MCP | `skills/actions/send-email/` |
+| **Post LinkedIn** | Auto-post to LinkedIn | `skills/actions/post-linkedin/` |
+| **Schedule Task** | Cron/Task Scheduler setup | `skills/workflow/schedule-task/` |
+| **Update Dashboard** | Keep dashboard current | `skills/utils/update-dashboard/` |
+| **Email MCP Server** | Gmail integration server | `skills/mcp-servers/email-mcp/` |
 
 ---
 
@@ -22,39 +34,48 @@ This is the **Bronze Tier** implementation of the Personal AI Employee hackathon
 ### Prerequisites
 
 - Python 3.13+
+- Node.js v24+ (for MCP servers)
 - Obsidian (optional, for viewing vault)
-- Qwen Code access
+- Gmail API credentials (for email features)
 
-### Setup (5 minutes)
+### Setup (15 minutes)
 
-1. **Verify Python version:**
+1. **Install Python dependencies:**
    ```bash
-   python --version  # Should be 3.13+
+   # Core dependencies
+   pip install watchdog
+
+   # Optional: Gmail integration
+   pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
    ```
 
-2. **Start the File Watcher:**
+2. **Install Node.js dependencies (for MCP):**
    ```bash
-   # Terminal 1 - Run watcher in background
+   cd skills/mcp-servers/email-mcp
+   npm install
+   ```
+
+3. **Configure Gmail (if using email features):**
+
+   **Note:** Your `credentials.json` is already configured in the project root.
+
+   ```bash
+   # Step 1: Run OAuth authentication (requires browser)
+   python skills/watchers/gmail-watcher/gmail_watcher.py AI_Employee_Vault --auth
+
+   # This will:
+   # 1. Open a browser window
+   # 2. Ask you to sign in with Google
+   # 3. Save the token to skills/watchers/gmail-watcher/token.json
+
+   # Step 2: Verify configuration
+   python skills/watchers/gmail-watcher/gmail_watcher.py AI_Employee_Vault --check-config
+   ```
+
+4. **Start the File Watcher:**
+   ```bash
    python watchers/filesystem_watcher.py AI_Employee_Vault --interval 30
    ```
-
-3. **Drop a file to test:**
-   ```bash
-   # Copy any file to the Inbox
-   cp some_document.pdf AI_Employee_Vault/Inbox/
-   
-   # Wait 30 seconds - watcher will move it to Needs_Action
-   ```
-
-4. **Process the file:**
-   ```bash
-   # Terminal 2 - Run the process drop skill
-   python skills/process-drop/process_drop.py AI_Employee_Vault
-   ```
-
-5. **Check results:**
-   - Open `AI_Employee_Vault/Dashboard.md` in Obsidian
-   - Check `AI_Employee_Vault/Done/` for processed files
 
 ---
 
@@ -68,88 +89,267 @@ Personal_AI_Employee(FTE's)/
 │   ├── Business_Goals.md       # Objectives and metrics
 │   ├── Inbox/                  # Drop files here
 │   ├── Needs_Action/           # Files awaiting processing
-│   ├── Done/                   # Completed items
-│   ├── Plans/                  # Generated plans
-│   ├── Approved/               # Approved actions
+│   ├── Plans/                  # Generated action plans
+│   ├── Pending_Approval/       # Awaiting human approval
+│   ├── Approved/               # Approved actions (auto-executed)
 │   ├── Rejected/               # Rejected actions
-│   └── Briefings/              # CEO briefings
+│   ├── Done/                   # Completed items
+│   ├── Drafts/                 # Email drafts
+│   ├── Scheduled/              # Scheduled posts
+│   └── Logs/                   # Activity logs
 │
 ├── watchers/
 │   ├── base_watcher.py         # Base class for all watchers
 │   └── filesystem_watcher.py   # File drop watcher (Bronze)
 │
-└── skills/
-    └── process-drop/
-        ├── SKILL.md            # Skill documentation
-        └── process_drop.py     # Processing logic
+├── skills/
+│   ├── watchers/
+│   │   ├── gmail-watcher/      # 🔵 NEW - Gmail monitoring
+│   │   └── whatsapp-watcher/   # 🔵 NEW - WhatsApp monitoring
+│   │
+│   ├── actions/
+│   │   ├── create-plan/        # 🔵 NEW - Plan.md generation
+│   │   ├── send-email/         # 🔵 NEW - Email sending
+│   │   └── post-linkedin/      # 🔵 NEW - LinkedIn posting
+│   │
+│   ├── workflow/
+│   │   ├── approval-workflow/  # 🔵 NEW - HITL approvals
+│   │   └── schedule-task/      # 🔵 NEW - Task scheduling
+│   │
+│   ├── utils/
+│   │   └── update-dashboard/   # 🔵 NEW - Dashboard updates
+│   │
+│   └── mcp-servers/
+│       └── email-mcp/          # 🔵 NEW - Email MCP server
+│
+└── requirements.txt            # Python dependencies
 ```
 
 ---
 
 ## 🔧 Usage
 
-### File Watcher Options
+### File Watcher (Bronze)
 
 ```bash
-# Continuous monitoring (default)
-python watchers/filesystem_watcher.py AI_Employee_Vault
+# Continuous monitoring
+python watchers/filesystem_watcher.py AI_Employee_Vault --interval 30
 
-# Custom check interval (every 60 seconds)
-python watchers/filesystem_watcher.py AI_Employee_Vault --interval 60
-
-# Run once (for cron jobs)
+# Run once (for cron)
 python watchers/filesystem_watcher.py AI_Employee_Vault --once
 ```
 
-### Process Drop Skill Options
+### Gmail Watcher (Silver)
 
 ```bash
-# Process all pending files
-python skills/process-drop/process_drop.py AI_Employee_Vault
+# First-time OAuth setup
+python skills/watchers/gmail-watcher/gmail_watcher.py AI_Employee_Vault --auth
+
+# Continuous monitoring
+python skills/watchers/gmail-watcher/gmail_watcher.py AI_Employee_Vault --interval 120
+
+# Run once
+python skills/watchers/gmail-watcher/gmail_watcher.py AI_Employee_Vault --once
+
+# Check configuration
+python skills/watchers/gmail-watcher/gmail_watcher.py AI_Employee_Vault --check-config
+```
+
+### Create Plan (Silver)
+
+```bash
+# Generate plans for all pending items
+python skills/actions/create-plan/create_plan.py AI_Employee_Vault
 
 # Verbose output
-python skills/process-drop/process_drop.py AI_Employee_Vault --verbose
-
-# Dry run (preview without changes)
-python skills/process-drop/process_drop.py AI_Employee_Vault --dry-run
+python skills/actions/create-plan/create_plan.py AI_Employee_Vault --verbose
 ```
 
-### With Qwen Code
+### Approval Workflow (Silver)
 
 ```bash
-# Let Qwen process files
-qwen "Process all files in AI_Employee_Vault/Needs_Action"
+# Check pending approvals
+python skills/workflow/approval-workflow/approval_workflow.py AI_Employee_Vault --check
 
-# Ask Qwen to summarize
-qwen "Read AI_Employee_Vault/Done and create a summary"
+# Execute approved actions
+python skills/workflow/approval-workflow/approval_workflow.py AI_Employee_Vault --execute
+
+# Create approval request
+python skills/workflow/approval-workflow/approval_workflow.py AI_Employee_Vault \
+  --create --action payment --amount 500 --recipient "Client A"
+```
+
+### Send Email (Silver)
+
+```bash
+# Send email (creates approval request)
+python skills/actions/send-email/send_email.py AI_Employee_Vault \
+  --send --to client@example.com --subject "Invoice" --content "Please find attached..."
+
+# Draft email
+python skills/actions/send-email/send_email.py AI_Employee_Vault \
+  --draft --to client@example.com --subject "Update" --content "Here's the update..."
+
+# Process approved emails
+python skills/actions/send-email/send_email.py AI_Employee_Vault --process-approved
+```
+
+### Post LinkedIn (Silver)
+
+```bash
+# Create post (requires approval)
+python skills/actions/post-linkedin/post_linkedin.py AI_Employee_Vault \
+  --create --content "Excited to announce our new product launch! #business"
+
+# Execute approved posts
+python skills/actions/post-linkedin/post_linkedin.py AI_Employee_Vault --execute
+```
+
+### Schedule Task (Silver)
+
+```bash
+# Daily briefing at 8 AM
+python skills/workflow/schedule-task/schedule_task.py AI_Employee_Vault \
+  --daily --time "08:00" --task "daily_briefing"
+
+# Weekly audit on Sunday at 10 PM
+python skills/workflow/schedule-task/schedule_task.py AI_Employee_Vault \
+  --weekly --day "Sunday" --time "22:00" --task "weekly_audit"
+
+# List scheduled tasks
+python skills/workflow/schedule-task/schedule_task.py AI_Employee_Vault --list
+```
+
+### Update Dashboard (Silver)
+
+```bash
+# Full update
+python skills/utils/update-dashboard/update_dashboard.py AI_Employee_Vault
+
+# Quick update (counts only)
+python skills/utils/update-dashboard/update_dashboard.py AI_Employee_Vault --quick
 ```
 
 ---
 
-## 📋 Bronze Tier Checklist
+## 🔄 Silver Tier Workflow
 
-- [x] **Obsidian vault** with Dashboard.md and Company_Handbook.md
-- [x] **One working Watcher** script (filesystem_watcher.py)
-- [x] **Qwen Code** reading/writing to vault
-- [x] **Basic folder structure**: /Inbox, /Needs_Action, /Done
-- [x] **Agent Skill** for file processing (process_drop)
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        PERCEPTION LAYER                         │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐              │
+│  │File Watcher │  │Gmail Watcher│  │WhatsApp     │              │
+│  │(Bronze)     │  │(Silver)     │  │Watcher      │              │
+│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘              │
+│         │                │                │                      │
+│         └────────────────┼────────────────┘                      │
+│                          │                                       │
+│                          ▼                                       │
+│               ┌───────────────────┐                              │
+│               │  /Needs_Action/   │                              │
+│               └─────────┬─────────┘                              │
+└─────────────────────────┼────────────────────────────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                        REASONING LAYER                          │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │                    QWEN CODE                               │  │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │  │
+│  │  │Create Plan   │  │Approval      │  │Update        │     │  │
+│  │  │Skill         │  │Workflow      │  │Dashboard     │     │  │
+│  │  └──────────────┘  └──────────────┘  └──────────────┘     │  │
+│  └───────────────────────────────────────────────────────────┘  │
+└─────────────────────────┬────────────────────────────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                        ACTION LAYER                             │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐              │
+│  │Send Email   │  │Post         │  │Schedule     │              │
+│  │(MCP)        │  │LinkedIn     │  │Tasks        │              │
+│  └─────────────┘  └─────────────┘  └─────────────┘              │
+└─────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-## 🔄 Workflow
+## 📋 Silver Tier Checklist
 
+- [x] **Bronze Tier Complete** (Foundation)
+- [x] **2+ Watcher scripts** (Filesystem + Gmail)
+- [x] **Post on LinkedIn** skill
+- [x] **Create Plan.md** skill
+- [x] **Email MCP server** + send skill
+- [x] **Approval workflow** skill
+- [x] **Scheduling setup** (cron/Task Scheduler)
+- [x] **All as Agent Skills**
+
+---
+
+## 🔐 Security & Approval
+
+### Actions Requiring Approval
+
+| Action | Approval Required | Auto-Approve |
+|--------|-------------------|--------------|
+| Payment | Always | Never |
+| Email to new contact | Yes | Known contacts |
+| LinkedIn post | Yes | After N approved |
+| File deletion | Important files | Temp files |
+
+### Approval Process
+
+1. Action creates request in `/Pending_Approval/`
+2. User reviews and moves to `/Approved/` or `/Rejected/`
+3. Approved actions execute automatically
+4. All actions logged to `/Logs/`
+
+---
+
+## 🧪 Testing
+
+### Test Approval Workflow
+
+```bash
+# Create test approval request
+python skills/workflow/approval-workflow/approval_workflow.py AI_Employee_Vault \
+  --create --action payment --amount 100 --recipient "Test Client"
+
+# Check pending
+python skills/workflow/approval-workflow/approval_workflow.py AI_Employee_Vault --check
+
+# Manually move file to /Approved, then:
+python skills/workflow/approval-workflow/approval_workflow.py AI_Employee_Vault --execute
 ```
-1. Drop file → AI_Employee_Vault/Inbox/
-                    ↓
-2. filesystem_watcher.py detects (every 30s)
-                    ↓
-3. Moves to → AI_Employee_Vault/Needs_Action/
-                    ↓
-4. process_drop skill processes
-                    ↓
-5. Moves to → AI_Employee_Vault/Done/YYYY-MM-DD/
-                    ↓
-6. Updates → Dashboard.md
+
+### Test Gmail Watcher
+
+```bash
+# Check config first
+python skills/watchers/gmail-watcher/gmail_watcher.py AI_Employee_Vault --check-config
+
+# Run once
+python skills/watchers/gmail-watcher/gmail_watcher.py AI_Employee_Vault --once
+```
+
+### Test Full Workflow
+
+```bash
+# 1. Drop a file
+echo "Test document" > AI_Employee_Vault/Inbox/test.txt
+
+# 2. Run watcher
+python watchers/filesystem_watcher.py AI_Employee_Vault --once
+
+# 3. Create plan
+python skills/actions/create-plan/create_plan.py AI_Employee_Vault
+
+# 4. Process file
+python skills/process-drop/process_drop.py AI_Employee_Vault
+
+# 5. Update dashboard
+python skills/utils/update-dashboard/update_dashboard.py AI_Employee_Vault
 ```
 
 ---
@@ -161,52 +361,20 @@ qwen "Read AI_Employee_Vault/Done and create a summary"
 | [Dashboard.md](./AI_Employee_Vault/Dashboard.md) | Real-time status overview |
 | [Company_Handbook.md](./AI_Employee_Vault/Company_Handbook.md) | Rules of engagement |
 | [Business_Goals.md](./AI_Employee_Vault/Business_Goals.md) | Objectives and metrics |
-| [SKILL.md](./skills/process-drop/SKILL.md) | Process drop skill docs |
+| [SKILL.md](./skills/) | Individual skill documentation |
 
 ---
 
-## 🧪 Testing
+## ⏭️ Next Steps (Gold Tier)
 
-### Test the Watcher
+After mastering Silver, consider adding:
 
-```bash
-# Run watcher once
-python watchers/filesystem_watcher.py AI_Employee_Vault --once
-
-# Drop a test file
-echo "Test content" > AI_Employee_Vault/Inbox/test.txt
-
-# Run watcher again
-python watchers/filesystem_watcher.py AI_Employee_Vault --once
-
-# Check Needs_Action folder
-ls AI_Employee_Vault/Needs_Action/
-```
-
-### Test the Skill
-
-```bash
-# Dry run first
-python skills/process-drop/process_drop.py AI_Employee_Vault --dry-run
-
-# Then process for real
-python skills/process-drop/process_drop.py AI_Employee_Vault
-
-# Check Done folder
-ls AI_Employee_Vault/Done/
-```
-
----
-
-## ⏭️ Next Steps (Silver Tier)
-
-After mastering Bronze, consider adding:
-
-1. **Gmail Watcher** - Monitor email for important messages
-2. **MCP Server** - Enable external actions (send emails, etc.)
-3. **Approval Workflow** - Human-in-the-loop for sensitive actions
-4. **Scheduled Tasks** - Cron jobs for regular processing
-5. **Plan.md Generation** - Qwen creates action plans
+1. **WhatsApp Watcher** - Monitor WhatsApp messages
+2. **Odoo Integration** - Accounting system via MCP
+3. **Facebook/Instagram** - Social media posting
+4. **Twitter (X)** - Tweet automation
+5. **Weekly CEO Briefing** - Autonomous audit reports
+6. **Ralph Wiggum Loop** - Multi-step autonomous tasks
 
 ---
 
@@ -214,10 +382,11 @@ After mastering Bronze, consider adding:
 
 | Issue | Solution |
 |-------|----------|
-| Watcher not detecting files | Check interval, ensure file not hidden (no `.` prefix) |
-| Skill reports "No pending files" | Ensure watcher moved files to Needs_Action |
-| Dashboard not updating | Check file permissions, ensure vault path is correct |
-| Python version error | Upgrade to Python 3.13+ |
+| Gmail auth fails | Re-run `--auth` flag, check credentials.json |
+| MCP server won't start | Run `npm install` in email-mcp folder |
+| Approval not executing | Check file is in /Approved folder |
+| Dashboard not updating | Check file permissions on Dashboard.md |
+| Scheduled tasks not running | Check cron with `crontab -l` or Task Scheduler |
 
 ---
 
@@ -226,6 +395,7 @@ After mastering Bronze, consider adding:
 - [Hackathon Blueprint](./Personal%20AI%20Employee%20Hackathon%200_%20Building%20Autonomous%20FTEs%20in%202026.md) - Full architecture guide
 - [Obsidian Download](https://obsidian.md/download) - Knowledge base app
 - [Qwen Code](https://github.com/QwenLM/Qwen) - AI reasoning engine
+- [Gmail API Setup](https://developers.google.com/gmail/api/quickstart/python) - Email integration
 - [Wednesday Research Meetings](https://us06web.zoom.us/j/87188707642?pwd=a9XloCsinvn1JzICbPc2YGUvWTbOTr.1) - Every Wednesday 10:00 PM
 
 ---

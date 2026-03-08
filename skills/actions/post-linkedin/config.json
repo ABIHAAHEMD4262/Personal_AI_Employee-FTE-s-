@@ -1,0 +1,34 @@
+{
+  "hashtags": [
+    "#AIAutomation",
+    "#DigitalTransformation", 
+    "#BusinessGrowth",
+    "#AI",
+    "#Automation",
+    "#Productivity",
+    "#SmallBusiness",
+    "#TechSolutions"
+  ],
+  "require_approval": true,
+  "post_signature": "",
+  "auto_post_schedule": {
+    "enabled": false,
+    "frequency": "weekly",
+    "day": "monday",
+    "time": "09:00"
+  },
+  "content_topics": [
+    "AI automation benefits",
+    "Client success stories",
+    "Time-saving tips",
+    "Business productivity",
+    "Digital transformation",
+    "Email automation",
+    "Workflow optimization"
+  ],
+  "posting_goals": {
+    "posts_per_week": 3,
+    "engagement_goal": "Generate 5 qualified leads per month",
+    "target_audience": "Small business owners, entrepreneurs, consultants"
+  }
+}

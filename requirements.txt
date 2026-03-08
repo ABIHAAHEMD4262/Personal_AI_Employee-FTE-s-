@@ -1,0 +1,23 @@
+# Personal AI Employee - Silver Tier
+# Python Dependencies
+
+# Core dependencies (Bronze Tier - already working)
+# No external dependencies needed for base functionality
+
+# Watchers
+watchdog>=4.0.0
+
+# Gmail Watcher (optional - install if using Gmail integration)
+# google-api-python-client>=2.100.0
+# google-auth-httplib2>=0.1.0
+# google-auth-oauthlib>=1.0.0
+
+# WhatsApp Watcher (optional - install if using WhatsApp integration)
+# playwright>=1.40.0
+
+# MCP Server dependencies (for email-mcp)
+# Install via npm: npm install @modelcontextprotocol/sdk
+
+# Note: Install optional dependencies as needed
+# pip install -r requirements.txt  # Core only
+# pip install -r requirements.txt --extra-index-url optional  # All features

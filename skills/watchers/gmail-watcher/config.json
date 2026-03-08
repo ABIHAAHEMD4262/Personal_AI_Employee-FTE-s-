@@ -1,0 +1,8 @@
+{
+  "check_interval": 120,
+  "query": "is:unread is:important",
+  "labels": ["INBOX"],
+  "max_results": 10,
+  "keywords": ["urgent", "asap", "invoice", "payment", "help"],
+  "exclude_senders": ["noreply@", "notifications@", "donotreply@", "no-reply@"]
+}
