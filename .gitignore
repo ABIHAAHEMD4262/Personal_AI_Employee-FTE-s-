@@ -5,6 +5,8 @@ token.json
 .env*
 client_secret*.json
 service_account*.json
+skills/mcp-servers/email-mcp/token.json
+skills/watchers/gmail-watcher/credentials.json
 
 # Python
 __pycache__/
