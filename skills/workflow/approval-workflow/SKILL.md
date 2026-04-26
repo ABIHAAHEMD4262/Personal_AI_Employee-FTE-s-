@@ -21,17 +21,17 @@ Manage human-in-the-loop approvals for sensitive actions.
 
 ## Usage
 
-### Via Qwen Code
+### Via Claude Code
 
 ```bash
 # Check pending approvals
-qwen "Check what approvals are pending in AI_Employee_Vault"
+claude "Check what approvals are pending in AI_Employee_Vault"
 
 # Process approved items
-qwen "Execute all approved actions in AI_Employee_Vault/Approved"
+claude "Execute all approved actions in AI_Employee_Vault/Approved"
 
 # Create approval request
-qwen "Create approval request for payment of $500 to Client A"
+claude "Create approval request for payment of $500 to Client A"
 ```
 
 ### Via Python Script

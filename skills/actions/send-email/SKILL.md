@@ -20,17 +20,17 @@ Send emails via MCP server with approval workflow.
 
 ## Usage
 
-### Via Qwen Code
+### Via Claude Code
 
 ```bash
 # Send a reply email
-qwen "Send reply to FILE_invoice.pdf in Needs_Action"
+claude "Send reply to FILE_invoice.pdf in Needs_Action"
 
 # Draft email for approval
-qwen "Draft email to client@example.com about project update"
+claude "Draft email to client@example.com about project update"
 
 # Search emails
-qwen "Search emails from last week about invoice"
+claude "Search emails from last week about invoice"
 ```
 
 ### Via Python Script
@@ -75,7 +75,7 @@ node skills/mcp-servers/email-mcp/index.js
 npx -y @modelcontextprotocol/server-gmail
 ```
 
-### 4. Configure in Qwen Code
+### 4. Configure in Claude Code
 
 Add to your MCP configuration:
 ```json

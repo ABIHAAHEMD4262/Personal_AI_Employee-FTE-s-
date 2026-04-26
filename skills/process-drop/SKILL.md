@@ -21,14 +21,14 @@ Process files dropped into the AI Employee vault for automated handling.
 
 ## Usage
 
-### Via Qwen Code
+### Via Claude Code
 
 ```bash
 # Process all pending files
-qwen "Process all files in AI_Employee_Vault/Needs_Action folder"
+claude "Process all files in AI_Employee_Vault/Needs_Action folder"
 
 # Process specific file
-qwen "Process FILE_document.pdf in Needs_Action and move to Done"
+claude "Process FILE_document.pdf in Needs_Action and move to Done"
 ```
 
 ### Via Python Script

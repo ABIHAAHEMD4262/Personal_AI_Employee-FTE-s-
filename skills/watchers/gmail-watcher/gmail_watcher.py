@@ -231,8 +231,14 @@ class GmailWatcher(BaseWatcher):
         except Exception as e:
             self.logger.warning(f"Could not save cache: {e}")
     
-    def authenticate(self):
-        """Run OAuth authentication flow."""
+    def authenticate(self, no_browser: bool = False):
+        """Run OAuth authentication flow.
+
+        Set no_browser=True (or pass --no-browser) when running in WSL/SSH
+        where a browser cannot be opened automatically. A URL will be printed
+        instead — paste it into any browser, complete the login, then paste
+        the resulting code back into the terminal.
+        """
         if not GMAIL_AVAILABLE:
             print("Gmail dependencies not installed.")
             print("Run: pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib")
@@ -241,10 +247,24 @@ class GmailWatcher(BaseWatcher):
         try:
             flow_instance = flow.from_client_secrets_file(
                 self.credentials_path,
-                scopes=['https://www.googleapis.com/auth/gmail.readonly']
+                scopes=['https://www.googleapis.com/auth/gmail.readonly', 'https://www.googleapis.com/auth/gmail.send']
             )
 
-            creds = flow_instance.run_local_server(port=0)
+            if no_browser:
+                flow_instance.redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'
+                auth_url, _ = flow_instance.authorization_url(prompt='consent')
+                print("\n" + "=" * 60)
+                print("WSL/headless mode: cannot open browser automatically.")
+                print("1. Copy this URL and open it in your Windows browser:")
+                print(f"\n   {auth_url}\n")
+                print("2. Sign in with Google and click Allow.")
+                print("3. Copy the authorization code shown on the page.")
+                print("=" * 60)
+                code = input("Paste the authorization code here: ").strip()
+                flow_instance.fetch_token(code=code)
+                creds = flow_instance.credentials
+            else:
+                creds = flow_instance.run_local_server(port=0)
 
             # Save credentials
             with open(self.token_path, 'w') as f:
@@ -266,7 +286,7 @@ class GmailWatcher(BaseWatcher):
             try:
                 creds = Credentials.from_authorized_user_file(
                     self.token_path,
-                    scopes=['https://www.googleapis.com/auth/gmail.readonly']
+                    scopes=['https://www.googleapis.com/auth/gmail.readonly', 'https://www.googleapis.com/auth/gmail.send']
                 )
             except Exception as e:
                 self.logger.warning(f"Could not load token: {e}")
@@ -523,6 +543,11 @@ def main():
         help="Run OAuth authentication"
     )
     parser.add_argument(
+        "--no-browser",
+        action="store_true",
+        help="WSL/SSH mode: print auth URL instead of opening a browser"
+    )
+    parser.add_argument(
         "--check-config",
         action="store_true",
         help="Check configuration"
@@ -541,7 +566,7 @@ def main():
     )
     
     if args.auth:
-        success = watcher.authenticate()
+        success = watcher.authenticate(no_browser=args.no_browser)
         exit(0 if success else 1)
     
     if args.check_config:

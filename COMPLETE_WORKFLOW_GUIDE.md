@@ -1,4 +1,4 @@
-# 🤖 Complete Email Workflow with Qwen Orchestrator
+# 🤖 Complete Email Workflow with Claude Orchestrator
 
 ## Your Exact Workflow
 
@@ -11,7 +11,7 @@
    ↓
 2. Creates: /Needs_Action/EMAIL_*.md
    ↓
-3. QWEN ORCHESTRATOR runs (every 30s)
+3. CLAUDE ORCHESTRATOR runs (every 30s)
    ↓
 4. Creates: /Plans/PLAN_*.md
    ↓
@@ -19,7 +19,7 @@
    ↓
 6. YOU: Review and move to /Approved/
    ↓
-7. QWEN ORCHESTRATOR detects approval
+7. CLAUDE ORCHESTRATOR detects approval
    ↓
 8. Sends email reply automatically
    ↓
@@ -45,11 +45,11 @@ Keep this running in Terminal 1.
 
 ---
 
-### Step 2: Start Qwen Orchestrator
+### Step 2: Start Claude Orchestrator
 
 ```bash
 # In Terminal 2
-python qwen_orchestrator.py AI_Employee_Vault --watch --interval 30
+python claude_orchestrator.py AI_Employee_Vault --watch --interval 30
 ```
 
 Keep this running in Terminal 2.
@@ -76,10 +76,10 @@ Content: Hello, this is a test email.
 Timeline:
 ├─ 0s:   Email sent
 ├─ 30s:  Gmail Watcher detects → Creates EMAIL_*.md in Needs_Action
-├─ 60s:  Qwen Orchestrator runs → Creates PLAN_*.md
+├─ 60s:  Claude Orchestrator runs → Creates PLAN_*.md
 ├─ 60s:  Moves both to Pending_Approval
 ├─ 90s:  YOU move to Approved (manual step)
-├─ 120s: Qwen Orchestrator detects → Sends reply
+├─ 120s: Claude Orchestrator detects → Sends reply
 ├─ 120s: Moves to Done
 └─ 120s: Dashboard updated
 ```
@@ -112,7 +112,7 @@ Gmail
 /Needs_Action/
   ├── EMAIL_Testing_12345.md     (created by Gmail Watcher)
   ↓
-Qwen Orchestrator runs
+Claude Orchestrator runs
   ↓
 /Plans/
   ├── PLAN_email_reply_12345.md  (created by create-plan skill)
@@ -127,7 +127,7 @@ YOU review and move to /Approved/
   ├── EMAIL_Testing_12345.md
   ├── PLAN_email_reply_12345.md
   ↓
-Qwen Orchestrator detects approval
+Claude Orchestrator detects approval
   ↓
 AUTO: Send email reply
   ↓
@@ -153,8 +153,8 @@ AUTO: Send email reply
 # Terminal 1: Gmail Watcher
 python skills/watchers/gmail-watcher/gmail_watcher.py AI_Employee_Vault --interval 60
 
-# Terminal 2: Qwen Orchestrator
-python qwen_orchestrator.py AI_Employee_Vault --watch --interval 30
+# Terminal 2: Claude Orchestrator
+python claude_orchestrator.py AI_Employee_Vault --watch --interval 30
 
 # Terminal 3: Send test email from your phone/computer
 # Then monitor:
@@ -170,7 +170,7 @@ watch -n 5 'ls -la AI_Employee_Vault/Done/$(date +%Y-%m-%d)/'
 | Component | Role |
 |-----------|------|
 | **Gmail Watcher** | Monitors Gmail, creates EMAIL_*.md files |
-| **Qwen Orchestrator** | Coordinates workflow, creates plans, moves files |
+| **Claude Orchestrator** | Coordinates workflow, creates plans, moves files |
 | **Create Plan Skill** | Generates action plan for each email |
 | **You (Human)** | Review and approve in Pending_Approval |
 | **Auto-Reply** | Sends email when approved |
@@ -181,7 +181,7 @@ watch -n 5 'ls -la AI_Employee_Vault/Done/$(date +%Y-%m-%d)/'
 ## ✅ Checklist
 
 - [ ] Gmail Watcher running
-- [ ] Qwen Orchestrator running
+- [ ] Claude Orchestrator running
 - [ ] Test email sent and starred
 - [ ] EMAIL_*.md appears in Needs_Action
 - [ ] PLAN_*.md created in Plans
@@ -209,11 +209,11 @@ watch -n 5 'ls -la AI_Employee_Vault/Done/$(date +%Y-%m-%d)/'
 
 ```
 ✅ Gmail Watcher: "Found 1 new item(s)"
-✅ Qwen Orchestrator: "Plan created successfully"
-✅ Qwen Orchestrator: "Moved to Pending_Approval"
+✅ Claude Orchestrator: "Plan created successfully"
+✅ Claude Orchestrator: "Moved to Pending_Approval"
 ✅ YOU: Move files to Approved
-✅ Qwen Orchestrator: "Email sent successfully"
-✅ Qwen Orchestrator: "Moved to Done"
+✅ Claude Orchestrator: "Email sent successfully"
+✅ Claude Orchestrator: "Moved to Done"
 ✅ Check Gmail Sent folder - reply is there!
 ```
 

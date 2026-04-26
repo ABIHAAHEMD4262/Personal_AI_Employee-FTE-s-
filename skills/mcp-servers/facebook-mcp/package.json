@@ -1,0 +1,26 @@
+{
+  "name": "facebook-mcp-server",
+  "version": "1.0.0",
+  "description": "Facebook/Instagram MCP Server for AI Employee - Gold Tier",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "node test.js"
+  },
+  "keywords": [
+    "facebook",
+    "instagram",
+    "mcp",
+    "ai-employee",
+    "social-media"
+  ],
+  "author": "AI Employee Project",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "dotenv": "^16.3.1",
+    "node-fetch": "^3.3.2"
+  }
+}

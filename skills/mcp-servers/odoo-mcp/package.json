@@ -1,0 +1,26 @@
+{
+  "name": "odoo-mcp-server",
+  "version": "1.0.0",
+  "description": "Odoo Community MCP Server for AI Employee - Gold Tier",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "node test.js"
+  },
+  "keywords": [
+    "odoo",
+    "mcp",
+    "ai-employee",
+    "accounting",
+    "erp"
+  ],
+  "author": "AI Employee Project",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "dotenv": "^16.3.1",
+    "node-fetch": "^3.3.2"
+  }
+}

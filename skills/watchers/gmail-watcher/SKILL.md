@@ -20,11 +20,11 @@ Monitor Gmail and create action files for important emails.
 
 ## Usage
 
-### Via Qwen Code
+### Via Claude Code
 
 ```bash
 # Process new Gmail messages
-qwen "Check Gmail and process new important emails"
+claude "Check Gmail and process new important emails"
 ```
 
 ### Via Python Script

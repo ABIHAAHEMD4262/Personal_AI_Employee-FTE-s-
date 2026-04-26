@@ -20,14 +20,14 @@ Generate structured Plan.md files with checkboxes for multi-step tasks.
 
 ## Usage
 
-### Via Qwen Code
+### Via Claude Code
 
 ```bash
 # Generate plans for all pending items
-qwen "Create plans for all items in AI_Employee_Vault/Needs_Action"
+claude "Create plans for all items in AI_Employee_Vault/Needs_Action"
 
 # Generate plan for specific file
-qwen "Create a plan for FILE_invoice.pdf in Needs_Action"
+claude "Create a plan for FILE_invoice.pdf in Needs_Action"
 ```
 
 ### Via Python Script

@@ -23,11 +23,11 @@ Monitor WhatsApp Web and create action files for urgent messages.
 
 ## Usage
 
-### Via Qwen Code
+### Via Claude Code
 
 ```bash
 # Check WhatsApp and process urgent messages
-qwen "Check WhatsApp for urgent messages"
+claude "Check WhatsApp for urgent messages"
 ```
 
 ### Via Python Script

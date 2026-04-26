@@ -181,22 +181,33 @@ Move this file to `/Rejected` folder with reason.
             import base64
             from email.mime.text import MIMEText
 
-            # Load credentials
-            creds_path = Path(__file__).parent.parent.parent.parent / 'credentials.json'
-            token_path = Path(__file__).parent.parent.parent / 'mcp-servers' / 'email-mcp' / 'token.json'
+            # Load credentials - search in priority order
+            project_root = Path(__file__).parent.parent.parent.parent
+            gmail_watcher_dir = project_root / 'skills' / 'watchers' / 'gmail-watcher'
 
-            if not creds_path.exists():
-                self.log("  → Credentials file not found", "ERROR")
+            creds_candidates = [
+                gmail_watcher_dir / 'credentials.json',
+                project_root / 'credentials.json',
+            ]
+            creds_path = next((p for p in creds_candidates if p.exists()), None)
+
+            token_candidates = [
+                gmail_watcher_dir / 'token.json',
+                project_root / 'skills' / 'mcp-servers' / 'email-mcp' / 'token.json',
+            ]
+            token_path = next((p for p in token_candidates if p.exists()), None)
+
+            if not creds_path:
+                self.log("  → credentials.json not found", "ERROR")
                 return False
 
-            # For now, simulate if no token
-            if not token_path.exists():
-                self.log("  → No OAuth token (run: node auth_gmail.js)", "WARNING")
+            if not token_path:
+                self.log("  → No OAuth token found. Re-run: python gmail_watcher.py <vault> --auth --no-browser", "WARNING")
                 return False
 
             # Load token and credentials
             token_data = json.loads(token_path.read_text())
-            creds_data = json.loads(creds_path.read_text())
+            creds_data = json.loads(Path(creds_path).read_text())
             
             # Build credentials with all required info
             creds = Credentials(

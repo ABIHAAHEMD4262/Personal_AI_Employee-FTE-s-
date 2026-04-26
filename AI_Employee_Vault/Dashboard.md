@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-03-05T00:00:07.323012
+last_updated: 2026-04-25T11:41:20.454957
 status: active
 ---
 
@@ -14,7 +14,7 @@ status: active
 | Metric | Value | Status |
 |--------|-------|--------|
 | Pending Tasks | 0 | ✅ Clear |
-| Awaiting Approval | 0 | ✅ Clear |
+| Awaiting Approval | 2 | ⏳ 2 awaiting |
 | Last Activity | - | - |
 
 ---
@@ -33,7 +33,8 @@ status: active
 
 ## ⏳ Pending Approvals
 
-*No items awaiting approval*
+- EMAIL_Confirm your business email address_19d2495c63364b57: 
+- PLAN_email_reply_unknown_20260425: 
 
 ---
 
@@ -57,7 +58,8 @@ status: active
 
 ## 🔔 Recent Notifications
 
-✅ 1 task(s) completed today
+⚠️ 2 approval(s) awaiting review
+✅ 2 task(s) completed today
 
 - Processed 1 file(s) at 2026-02-26T21:43:21.038900
 
@@ -80,9 +82,9 @@ status: active
 | Component | Status | Last Check |
 |-----------|--------|------------|
 | File Watcher | ⏸️ Stopped | - |
-| Qwen Code | Ready | - |
+| Claude Code | Ready | - |
 | MCP Servers | Not configured | - |
 
 ---
 
-*Dashboard auto-updates when Qwen processes tasks*
+*Dashboard auto-updates when Claude processes tasks*
